@@ -12,6 +12,8 @@ var createHash = function (password) {
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
 
+
+
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -56,10 +58,6 @@ passport.use('local-signup', new LocalStrategy({
     });
   }));
 
-router.get('/test', (req, res) => {
-  res.send('test');
-} )
-
 passport.use(new LocalStrategy(
   function (username, password, done) {
 
@@ -81,4 +79,4 @@ passport.use(new LocalStrategy(
   }
 ));
 
-module.exports = router;
+module.exports = passport;
