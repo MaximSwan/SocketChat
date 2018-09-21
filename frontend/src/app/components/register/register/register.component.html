@@ -1,0 +1,21 @@
+<div class="main-signin">
+  <div class="main-signin__head">
+    <p>РЕГИСТРАЦИЯ</p>
+  </div>
+  <div class="main-signin__middle">
+    <div class="middle__form">
+      <input [(ngModel)]="login" type="text" placeholder="Логин">
+      <input [(ngModel)]="password" type="password" placeholder="Пароль">
+      <input (click)="signUp()" type="submit" value="Зарегестрироваться">
+    </div>
+  </div>
+  <div class="main-signin__foot">
+    <div class="foot__left">
+      <p>Войти через:</p>
+    </div>
+    <div class="foot__right">
+      <div class="twit"><a href="#"></a></div>
+      <div class="face"><a href="#"></a></div>
+    </div>
+  </div>
+</div>

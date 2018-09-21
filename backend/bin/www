@@ -1,0 +1,31 @@
+var app = require('../app');
+var db = require('../db/db');
+var debug = require('debug')('backend:server');
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+var pass = require('../routes/passport');
+
+io.on('connection', (socket) => {
+  console.log('New user connected')
+  socket.on('register', async (data) => {
+    console.log(data);
+    
+    passport.authenticate('local-signup', (req, res) => {
+      res.status(200).send();
+    });
+  })
+
+  socket.on('new_message', (data) => {
+    io.sockets.emit('new_message', { message: data.message, username: socket.username });
+  })
+
+  socket.on('typing', (data) => {
+    socket.broadcast.emit('typing', { username: socket.username })
+  })
+})
+
+http.listen(3000, function () {
+  console.log('listening on *:3000');
+});
