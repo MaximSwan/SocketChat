@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { AppComponent } from './app.component';
-import { ApiService } from './services/api/api.service';
 import { UserService } from './services/user/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketService } from './services/socket/socket.service';
@@ -34,7 +33,7 @@ const appRoute: Routes = [
     RouterModule.forRoot(appRoute),
     FormsModule,
   ],
-  providers: [ApiService, UserService, SocketService],
+  providers: [UserService, SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

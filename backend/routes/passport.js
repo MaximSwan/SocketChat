@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var bcrypt = require('bcryptjs');
+var bCrypt = require('bcryptjs');
 var db = require('../db/db.js');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
@@ -11,9 +11,6 @@ var isValidPassword = function (user, password) {
 var createHash = function (password) {
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
-
-
-
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -28,41 +25,10 @@ passport.deserializeUser(function (id, cb) {
   });
 });
 
-passport.use('local-signup', new LocalStrategy({
-  usernameField: 'username',
-  passwordField: 'password',
-  passReqToCallback: true
-},
-
-  function (req, username, password, done) {
-    db.User.findOne({ username: username }, function (err, user) {
-
-      if (err)
-        return done(err);
-
-      if (user) {
-        return done(null, false, { message: 'Incorrect' });
-      } else {
-
-        let newUser = new db.User();
-
-        newUser.username = username;
-        newUser.password = createHash(password);
-
-        newUser.save(function (err) {
-          if (err)
-            throw err;
-          return done(null, newUser);
-        });
-      }
-    });
-  }));
-
 passport.use(new LocalStrategy(
   function (username, password, done) {
-
     db.User.findOne({ username: username }, function (err, user) {
-
+ 
       if (err) { return done(err); }
 
       if (!user) {
@@ -79,4 +45,50 @@ passport.use(new LocalStrategy(
   }
 ));
 
+let signUp = function( username, password, done) {
+  db.User.findOne({ username: username }, function (err, user) {
+
+    if (err)
+      return done(err);
+
+    if (user) {
+      return console.log('incorrect user');
+    } else {
+
+      let newUser = new db.User();
+
+      newUser.username = username;
+      newUser.password = createHash(password);
+      newUser.save(function (err) {
+        if (err)
+          throw err;
+        return console.log(newUser);
+      });
+    }
+  });
+}
+
+let logIn = new LocalStrategy(
+  function (username, password, done) {
+    console.log('ewfaw');
+    db.User.findOne({ username: username }, function (err, user) {
+ 
+      if (err) { return done(err); }
+
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+
+      if (!isValidPassword(user, password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+
+      return done(null, user);
+
+    });
+  }
+)
+
 module.exports = passport;
+module.exports.signUp = signUp;
+module.exports.logIn = logIn;

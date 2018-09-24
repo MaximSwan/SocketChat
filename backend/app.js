@@ -11,8 +11,6 @@ var app = express();
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -49,7 +47,6 @@ app.use((err, req, res, next) => {
   res.status(errorData.statusCode).send(errorData);
 });
 
-app.use('/', passportRouter);
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 

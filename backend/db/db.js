@@ -17,9 +17,6 @@ const User = mongoose.model('User', {
     type: String,
     required: true
   },
-  _id: {
-    type: String,
-  }
 })
 
 module.exports = {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import * as io from "socket.io-client";
+import * as io from 'socket.io-client';
 
 @Injectable()
 export class SocketService {
@@ -8,10 +8,10 @@ export class SocketService {
   constructor(
   ) {
     this.socket = io(this.host);
-    this.socket.on("connect", () => this.connect());
-    this.socket.on("disconnect", () => this.disconnect());
-    this.socket.on("error", (error: string) => {
-      console.log(`ERROR: "${error}" (${this.host})`);
+    this.socket.on('connect', () => this.connect());
+    this.socket.on('disconnect', () => this.disconnect());
+    this.socket.on('error', (error: string) => {
+      console.log(`ERROR: '${error}' (${this.host})`);
     });
   }
 
@@ -35,7 +35,16 @@ emit(chanel:string, message:any) {
   });
 }
 
-  private host: string = "http://localhost:3000";
+on(event_name) {
+  return new Observable<any>(observer => {
+      this.socket.off(event_name); 
+      this.socket.on(event_name, (data) => {
+          observer.next(data);
+      });
+  });
+}
+
+  private host: string = 'http://localhost:3000';
   private socket: any;
 
 } 

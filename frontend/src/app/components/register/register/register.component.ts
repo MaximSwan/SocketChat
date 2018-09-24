@@ -14,7 +14,8 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   login;
-  password
+  password;
+  toggleSignup:boolean = false;
 
   signUp() {
     if (!this.login || !this.password) {
@@ -32,6 +33,9 @@ export class RegisterComponent implements OnInit {
         console.log('complete');
       }
     )
+    this.login = '';
+    this.password = '';
+    this.toggleSignup = true
   }
 
   ngOnInit() {
