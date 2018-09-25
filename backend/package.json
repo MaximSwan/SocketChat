@@ -9,7 +9,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",
-    "cookie-parser": "~1.4.3",
+    "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dotenv": "^6.0.0",

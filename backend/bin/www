@@ -4,17 +4,21 @@ var debug = require('debug')('backend:server');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var passport = require('../routes/passport');
+var sessionStore = require('sessionstorage');
+var express = require('express');
 
 io.on('connection', (socket) => {
   console.log('New user connected');
+
   socket.on('register', data => {
     passport.signUp(data.username, data.password);
   })
   socket.on('login', async data => {
-    passport.logIn()
+    let user = await passport.logIn(data.username, data.password);
+    socket.emit('login', user);
   })
-})
 
+})
 
 http.listen(3000, function () {
   console.log('listening on :3000');

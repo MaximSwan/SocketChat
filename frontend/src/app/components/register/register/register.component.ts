@@ -18,6 +18,9 @@ export class RegisterComponent implements OnInit {
   toggleSignup:boolean = false;
 
   signUp() {
+    if(this.toggleSignup == true) {
+      return alert('Вы уже зарегестрировались');
+    }
     if (!this.login || !this.password) {
       return alert('Введите все данные')
     }

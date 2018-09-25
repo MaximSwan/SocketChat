@@ -4,9 +4,9 @@
   </div>
   <div class="main-signin__middle">
     <div class="middle__form">
-      <input type="text" placeholder="Логин">
-      <input type="password" placeholder="Пароль">
-      <input type="submit" value="ВОЙТИ">
+      <input [(ngModel)]="login" type="text" placeholder="Логин">
+      <input [(ngModel)]="password" type="password" placeholder="Пароль">
+      <input (click)="logIn();" type="submit" value="ВОЙТИ">
     </div>
   </div>
   <div class="main-signin__foot">

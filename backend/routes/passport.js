@@ -11,48 +11,15 @@ var isValidPassword = function (user, password) {
 var createHash = function (password) {
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
-router.use(passport.initialize());
-router.use(passport.session());
 
-passport.serializeUser(function (user, cb) {
-  cb(null, user.id);
-});
-
-passport.deserializeUser(function (id, cb) {
-  db.User.findById(id, function (err, user) {
-    if (err) { return cb(err); }
-    cb(null, user);
-  });
-});
-
-passport.use(new LocalStrategy(
-  function (username, password, done) {
-    db.User.findOne({ username: username }, function (err, user) {
- 
-      if (err) { return done(err); }
-
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-
-      if (!isValidPassword(user, password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-
-      return done(null, user);
-
-    });
-  }
-));
-
-let signUp = function( username, password, done) {
+let signUp = function (username, password, done) {
   db.User.findOne({ username: username }, function (err, user) {
 
     if (err)
       return done(err);
 
     if (user) {
-      return console.log('incorrect user');
+      return 'incorrect user';
     } else {
 
       let newUser = new db.User();
@@ -62,32 +29,31 @@ let signUp = function( username, password, done) {
       newUser.save(function (err) {
         if (err)
           throw err;
-        return console.log(newUser);
+
+        return newUser;
       });
     }
   });
 }
 
-let logIn = new LocalStrategy(
-  function (username, password, done) {
-    console.log('ewfaw');
-    db.User.findOne({ username: username }, function (err, user) {
- 
-      if (err) { return done(err); }
+let logIn = async (username, password) => {
+  try {
+    let user = await db.User.findOne({ username: username });
+    if (!user) {
+      return 'Incorrect username';
+    }
 
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
+    if (!isValidPassword(user, password)) {
+      return 'Incorrect password';
+    }
 
-      if (!isValidPassword(user, password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
+    return user;
 
-      return done(null, user);
-
-    });
+  } catch (err) {
+    console.error(err);
   }
-)
+
+}
 
 module.exports = passport;
 module.exports.signUp = signUp;
