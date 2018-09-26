@@ -11,8 +11,21 @@ var isValidPassword = function (user, password) {
 var createHash = function (password) {
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
+router.use(passport.initialize());
+router.use(passport.session());
 
-let signUp = function (username, password, done) {
+passport.serializeUser(function (user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function (id, cb) {
+  db.User.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
+
+let signUp = (username, password, done) => {
   db.User.findOne({ username: username }, function (err, user) {
 
     if (err)
@@ -26,6 +39,7 @@ let signUp = function (username, password, done) {
 
       newUser.username = username;
       newUser.password = createHash(password);
+      
       newUser.save(function (err) {
         if (err)
           throw err;
@@ -40,11 +54,11 @@ let logIn = async (username, password) => {
   try {
     let user = await db.User.findOne({ username: username });
     if (!user) {
-      return 'Incorrect username';
+      return 'Incorrect';
     }
 
     if (!isValidPassword(user, password)) {
-      return 'Incorrect password';
+      return 'Incorrect';
     }
 
     return user;
@@ -55,6 +69,13 @@ let logIn = async (username, password) => {
 
 }
 
+let checkBody = data => {
+  if (!data) {
+    return { statusCode: 400, message: 'is empty' }
+  }
+}
+
 module.exports = passport;
 module.exports.signUp = signUp;
 module.exports.logIn = logIn;
+module.exports.checkBody = checkBody;

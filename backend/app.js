@@ -23,20 +23,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user.id);
-});
-
-passport.deserializeUser(function (id, cb) {
-  db.User.findById(id, function (err, user) {
-    if (err) { return cb(err); }
-    cb(null, user);
-  });
-});
-
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');

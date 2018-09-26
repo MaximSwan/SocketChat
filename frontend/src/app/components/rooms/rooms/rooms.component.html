@@ -1,0 +1,7 @@
+<button class="btn-primary" (click)="toggleAdd = !toggleAdd;" >add room</button>
+<div *ngIf="toggleAdd == true" >
+  <input [(ngModel)]="nameRoom" type="text" placeholder="имя комнаты">
+  <button (click)="addRoom()" class="btn-primary">Creat Room</button>
+</div>
+<p>Rooms list:</p>
+<app-room *ngFor="let room of rooms" > </app-room>

@@ -11,13 +11,34 @@ io.on('connection', (socket) => {
   console.log('New user connected');
 
   socket.on('register', data => {
-    passport.signUp(data.username, data.password);
+    try {
+      passport.checkBody(data);
+      passport.signUp(data.username, data.password);
+    } catch (err) {
+      console.error(err);
+    }
   })
   socket.on('login', async data => {
-    let user = await passport.logIn(data.username, data.password);
-    socket.emit('login', user);
+    try {
+      passport.checkBody(data);
+      let user = await passport.logIn(data.username, data.password);
+      socket.emit('login', user);
+    } catch (err) {
+      console.error(err);
+    }
   })
-
+  socket.on('room', async data => {
+    try {
+      passport.checkBody(data)
+      let room = new db.Room();
+      room.name = data;
+      room.validate();
+      await room.save();
+      socket.emit('room', room);
+    } catch (err) {
+      console.error(err);
+    }
+  })
 })
 
 http.listen(3000, function () {

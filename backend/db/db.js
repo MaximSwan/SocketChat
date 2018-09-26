@@ -19,6 +19,14 @@ const User = mongoose.model('User', {
   },
 })
 
+const Room = mongoose.model('Room', {
+  name:{
+    type: String,
+    required: true
+}
+})
+
 module.exports = {
-  User: User
+  User: User,
+  Room: Room
 }

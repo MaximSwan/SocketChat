@@ -10,7 +10,13 @@ import { RegisterComponent } from './components/register/register/register.compo
 
 import {FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { RoomsComponent } from './components/rooms/rooms/rooms.component';
+import { RoomComponent } from './components/room/room/room.component';
 const appRoute: Routes = [
+  {
+    path:'rooms',
+    component: RoomsComponent
+  },
   {
     path: 'login',
     component: LoginComponent
@@ -25,7 +31,9 @@ const appRoute: Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    RoomsComponent,
+    RoomComponent
   ],
   imports: [
     HttpClientModule,

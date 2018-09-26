@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from '../../../services/socket/socket.service';
 import { User } from '../../../services/user/user.service';
-import * as CryptoJS from 'crypto-js';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,11 +12,13 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private socket: SocketService,
+    private router: Router
   ) {
   }
 
   login;
   password;
+  toggleUserFail: boolean = false;
 
   logIn() {
     if (!this.login || !this.password) {
@@ -35,7 +38,15 @@ export class LoginComponent implements OnInit {
     )
     this.socket.on('login').subscribe(
       user => {
-        
+        if (user == 'Incorrect') {
+          return this.toggleUserFail = true;
+        }
+        user = btoa(user.username);
+        localStorage.setItem('username', user)
+        this.router.navigate(['rooms'])
+      },
+      error => {
+        console.error(error);
       }
     )
   }
