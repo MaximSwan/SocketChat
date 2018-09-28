@@ -6,7 +6,6 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var passportRouter = require('./routes/passport');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var app = express();
 
 var passport = require('passport')
@@ -32,7 +31,6 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', indexRouter);
-app.use('/', usersRouter);
 
 
 module.exports = app;

@@ -22,23 +22,49 @@ io.on('connection', (socket) => {
     try {
       passport.checkBody(data);
       let user = await passport.logIn(data.username, data.password);
-      socket.emit('login', user);
+      io.emit('login', user);
     } catch (err) {
       console.error(err);
     }
   })
   socket.on('room', async data => {
     try {
-      passport.checkBody(data)
+      passport.checkBody(data);
       let room = new db.Room();
       room.name = data;
       room.validate();
       await room.save();
-      socket.emit('room', room);
+      io.emit('room', room);
     } catch (err) {
       console.error(err);
     }
   })
+  socket.on('rooms', async data => {
+    try {
+      let rooms = await db.Room.find({});
+      io.emit('rooms', rooms);
+    } catch (err) {
+      console.error(err);
+    }
+  })
+  socket.on('roomDelete', async data => {
+    try {
+      passport.checkBody(data);
+      let roomDeleted = await db.Room.findOneAndRemove({ name: data });
+      io.emit('roomDelete', roomDeleted);
+    } catch (err) {
+      console.error(err);
+    }
+  })
+  socket.on('message', data => {
+    passport.checkBody(data);
+    io.emit('message', data);
+  })
+
+  socket.on('disconnect', function () {
+    console.log('user disconnected');
+  });
+
 })
 
 http.listen(3000, function () {
