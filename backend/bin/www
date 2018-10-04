@@ -13,10 +13,6 @@ var vkAuth = require('vk-auth')(123456, 'audio');
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.on('user_token', data => {
-    console.log(data);
-  })
-
   socket.on('register', data => {
     try {
       passport.checkBody(data);
@@ -29,6 +25,9 @@ io.on('connection', (socket) => {
     try {
       passport.checkBody(data);
       let user = await passport.logIn(data.username, data.password);
+      if (user == 'Incorrect') {
+        return io.emit('Incorrect');
+      }
       user = JSON.stringify(user);
       let userToken = Buffer.from(user).toString('base64');
       io.emit('login', userToken);
@@ -41,7 +40,7 @@ io.on('connection', (socket) => {
     vkAuth.authorize(data.username, data.password);
 
     vkAuth.on('error', function (err) {
-      return 'Incorrect'
+      return io.emit('loginVk', 'Incorrect');
     });
 
     vkAuth.on('auth', function (tokenParams) {

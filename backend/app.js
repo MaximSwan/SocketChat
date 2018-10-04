@@ -13,10 +13,6 @@ var passport = require('passport')
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var sess = {
-  secret: 'keyboard cat',
-  cookie: {}
-}
 
 app.use(logger('dev'));
 app.use(express.json());
