@@ -1,3 +1,6 @@
+<div *ngIf="user">
+<p style="color: blue">Вы вошли как : {{user}} </p>
+<p (click)="logOut()" routerLink="/login" style="color: red" >Выйти</p>
 <button class="btn-primary" (click)="toggleAdd = !toggleAdd;">add room</button>
 <div *ngIf="toggleAdd == true">
   <input [(ngModel)]="nameRoom" type="text" placeholder="имя комнаты">
@@ -5,3 +8,9 @@
 </div>
 <p>Rooms list:</p>
 <app-room (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
+</div>
+<div *ngIf="user == null" >
+  <span>
+    Чтобы видеть и заходить в комнаты, <p style="color: blue" routerLink="/login"> Авторизируйтесь</p> 
+</span>
+  </div>

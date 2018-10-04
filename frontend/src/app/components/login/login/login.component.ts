@@ -37,12 +37,11 @@ export class LoginComponent implements OnInit {
       }
     )
     this.socket.on('login').subscribe(
-      user => {
-        if (user == 'Incorrect') {
+      userToken  => {
+        if (userToken == 'Incorrect') {
           return this.toggleUserFail = true;
         }
-        user = btoa(user.username);
-        localStorage.setItem('username', user)
+        localStorage.setItem('userToken', userToken );
         this.router.navigate(['rooms'])
       },
       error => {

@@ -14,35 +14,41 @@ export class SocketService {
       console.log(`ERROR: '${error}' (${this.host})`);
     });
   }
+  messages = [];
 
-  connect () {
+  message(data) {
+    
+  }
+
+  connect() {
     this.socket.connect();
-}
-  disconnect () {
+  }
+
+  disconnect() {
     this.socket.disconnect();
-}
+  }
 
-emit(chanel:string, message:any) {
-  return new Observable<any>(observer => {
+  emit(chanel: string, message: any) {
+    return new Observable<any>(observer => {
       this.socket.emit(chanel, message, function (data) {
-          if (data.success) {
-              observer.next(data.msg);
-          } else {
-              observer.error(data.msg);
-          }
-          observer.complete();
+        if (data.success) {
+          observer.next(data.msg);
+        } else {
+          observer.error(data.msg);
+        }
+        observer.complete();
       });
-  });
-}
+    });
+  }
 
-on(event_name) {
-  return new Observable<any>(observer => {
-      this.socket.off(event_name); 
+  on(event_name) {
+    return new Observable<any>(observer => {
+      this.socket.off(event_name);
       this.socket.on(event_name, (data) => {
-          observer.next(data);
+        observer.next(data);
       });
-  });
-}
+    });
+  }
 
   private host: string = 'http://localhost:3000';
   private socket: any;

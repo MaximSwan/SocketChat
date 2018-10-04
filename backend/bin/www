@@ -4,11 +4,15 @@ var debug = require('debug')('backend:server');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var passport = require('../routes/passport');
-var sessionStore = require('sessionstorage');
+var jwt = require('jsonwebtoken');
 var express = require('express');
 
 io.on('connection', (socket) => {
   console.log('New user connected');
+
+  socket.on('user_token', data => {
+    console.log(data);
+  })
 
   socket.on('register', data => {
     try {
@@ -22,7 +26,9 @@ io.on('connection', (socket) => {
     try {
       passport.checkBody(data);
       let user = await passport.logIn(data.username, data.password);
-      io.emit('login', user);
+      user = JSON.stringify(user);
+      let userToken = Buffer.from(user).toString('base64');
+      io.emit('login', userToken);
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +67,7 @@ io.on('connection', (socket) => {
     io.emit('message', data);
   })
 
-  socket.on('disconnect', function () {
+  socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 

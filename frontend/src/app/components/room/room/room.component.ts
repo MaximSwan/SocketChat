@@ -17,38 +17,39 @@ export class RoomComponent implements OnInit {
   ) {
     let date = new Date();
     this.dateCurrent = `${date.getHours()}:${date.getMinutes()}`;
-    socket.on('message').subscribe(
-      data => {
-        this.messages.push(data);
-        this.message = '';
-      }
-    )
 
-    let userCurrent = localStorage.getItem('username');
+    let userCurrent: any = localStorage.getItem('userToken');
     userCurrent = atob(userCurrent);
-    this.user = userCurrent;
+    userCurrent = JSON.parse(userCurrent);
+    this.user = userCurrent.username;
   }
   dateCurrent;
-  messages = [];
+  messages = []; 
   message;
   user;
   toogleChat: boolean = false;
 
-  writeMessage() {
+  async writeMessage() {
     if (!this.message) {
       return alert('Вы не можете отправить пустое сообщение');
     }
-    this.socket.emit('message', this.message).subscribe(
+    await this.socket.emit('message', this.message).subscribe();
+    this.socket.on('message').subscribe(
       data => {
-        console.log('Success', data);
-      },
-      error => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
+        this.messages.push(data);
       }
     )
+    //   this.socket.emit('message', this.message).subscribe(
+    //   data => {
+    //     console.log('Success', data);
+    //   },
+    //   error => {
+    //     console.log('Error', error);
+    //   },
+    //   () => {
+    //     console.log('complete');
+    //   }
+    // )
   }
 
   deleteThisRoom(room) {

@@ -11,6 +11,13 @@ export class RoomsComponent implements OnInit {
   constructor(
     private socket: SocketService
   ) {
+    let userCurrent: any = localStorage.getItem('userToken');
+    if(userCurrent == null) {
+      return;
+    }
+    userCurrent = atob(userCurrent);
+    userCurrent = JSON.parse(userCurrent);
+    this.user = userCurrent.username;
 
     this.loadRooms();
 
@@ -25,7 +32,7 @@ export class RoomsComponent implements OnInit {
         this.rooms.push(data.name);
       }
     );
-    
+
     socket.on('rooms').subscribe(
       data => {
         this.rooms.splice(0, this.rooms.length);
@@ -33,18 +40,18 @@ export class RoomsComponent implements OnInit {
           const elem = data[i];
           this.rooms.push(elem.name);
         }
-      } 
+      }
     );
 
-   }
+  }
 
   toggleAdd: boolean = false;
   nameRoom;
   rooms = [];
-
-   loadRooms() {
-     this.socket.emit('rooms', 'getRooms').subscribe();
-   }
+  user;
+  loadRooms() {
+    this.socket.emit('rooms', 'getRooms').subscribe();
+  }
 
   onRemoveRoom(event) {
     this.socket.emit('roomDelete', event).subscribe(
@@ -58,7 +65,7 @@ export class RoomsComponent implements OnInit {
         console.log('complete');
       }
     );
-   }
+  }
 
   addRoom() {
     this.socket.emit('room', this.nameRoom).subscribe(
@@ -73,6 +80,10 @@ export class RoomsComponent implements OnInit {
       }
     )
 
+  }
+
+  logOut() {
+    localStorage.removeItem('userToken');
   }
 
   ngOnInit() {

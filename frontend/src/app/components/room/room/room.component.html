@@ -10,8 +10,9 @@
 
         <div class="card-body">
           <div *ngFor="let message of messages">
-            <p class="card-text"> {{user}} : {{message}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{dateCurrent}}
-              </p>
+            <p class="card-text"> {{user}} : {{message}}
+              <span style="margin-left: 59px;"> {{dateCurrent}} </span>
+            </p>
           </div>
           <div class="input-group mb-3">
             <input [(ngModel)]="message" type="text" class="form-control" placeholder="Ваше сообщение..." aria-label="Recipient's username"
@@ -23,6 +24,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
