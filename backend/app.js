@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var passportRouter = require('./routes/passport');
-var indexRouter = require('./routes/index');
 var app = express();
 
 var passport = require('passport')
@@ -30,7 +29,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use('/', indexRouter);
 
 
 module.exports = app;

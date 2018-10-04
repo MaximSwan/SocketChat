@@ -45,37 +45,17 @@ export class RoomsComponent implements OnInit {
   nameRoom;
   rooms = [];
   user;
+  
   loadRooms() {
     this.socket.emit('rooms', 'getRooms').subscribe();
   }
 
   onRemoveRoom(event) {
-    this.socket.emit('roomDelete', event).subscribe(
-      data => {
-        console.log('Success', data);
-      },
-      error => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    );
+    this.socket.emit('roomDelete', event).subscribe();
   }
 
   addRoom() {
-    this.socket.emit('room', this.nameRoom).subscribe(
-      data => {
-        console.log('Success', data);
-      },
-      error => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    )
-
+    this.socket.emit('room', this.nameRoom).subscribe();
   }
 
   logOut() {

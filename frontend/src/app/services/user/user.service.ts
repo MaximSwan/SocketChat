@@ -9,16 +9,15 @@ export class UserService {
 
   getUser() {
     let userCurrent: any = localStorage.getItem('userToken');
-    if(userCurrent == null) {
+    if (userCurrent == null) {
       return;
     }
     userCurrent = atob(userCurrent);
     userCurrent = JSON.parse(userCurrent);
-    userCurrent = JSON.parse(userCurrent)
-    if(userCurrent.response) {
-       let user = userCurrent.response[0];
+    if (userCurrent.response) {
+      let user = userCurrent.response[0].first_name;
       return user;
-      }
+    }
     let user = userCurrent.username;
     return user;
   }
