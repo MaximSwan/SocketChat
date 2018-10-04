@@ -6,6 +6,9 @@ var io = require('socket.io')(http);
 var passport = require('../routes/passport');
 var jwt = require('jsonwebtoken');
 var express = require('express');
+var rp = require('request-promise');
+
+var vkAuth = require('vk-auth')(123456, 'audio');
 
 io.on('connection', (socket) => {
   console.log('New user connected');
@@ -33,6 +36,26 @@ io.on('connection', (socket) => {
       console.error(err);
     }
   })
+  socket.on('loginVk', async data => {
+    passport.checkBody(data);
+    vkAuth.authorize(data.username, data.password);
+
+    vkAuth.on('error', function (err) {
+      return 'Incorrect'
+    });
+
+    vkAuth.on('auth', function (tokenParams) {
+      let vkToken = '501dde12c1bd125af8d3fbb19c03b29931362eb9faeeacf786924863d0b277e5ec1714e41122acb609c84'
+      rp(`https://api.vk.com/method/users.get?user_id=${tokenParams.user_id}&v=5.52&access_token=${vkToken}`)
+        .then(res => {
+          res = JSON.stringify(res);
+          res = Buffer.from(res).toString('base64');
+          io.emit('loginVk', res);
+        })
+    })
+
+  })
+
   socket.on('room', async data => {
     try {
       passport.checkBody(data);
@@ -62,9 +85,23 @@ io.on('connection', (socket) => {
       console.error(err);
     }
   })
-  socket.on('message', data => {
+  socket.on('message', async data => {
     passport.checkBody(data);
-    io.emit('message', data);
+    let token = data[1];
+    if (!token || token == null || token == undefined) {
+      return;
+    }
+    token = Buffer.from(token, 'base64').toString();
+    token = JSON.parse(token);
+    token = JSON.parse(token);
+    if (token.response) {
+      return io.emit('message', data[0]);
+    }
+    let user = await db.User.findOne({ username: token.username });
+    if (user.role == 'User') {
+      io.emit('message', data[0]);
+    }
+    passport.logInVk();
   })
 
   socket.on('disconnect', () => {

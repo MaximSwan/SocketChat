@@ -1,5 +1,6 @@
+
 <div *ngIf="user">
-<p style="color: blue">Вы вошли как : {{user}} </p>
+<p style="color: blue">Вы вошли как : {{user.first_name}} </p>
 <p (click)="logOut()" routerLink="/login" style="color: red" >Выйти</p>
 <button class="btn-primary" (click)="toggleAdd = !toggleAdd;">add room</button>
 <div *ngIf="toggleAdd == true">

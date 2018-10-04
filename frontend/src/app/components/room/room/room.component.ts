@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, } from '@angular/core';
 import { SocketService } from '../../../services/socket/socket.service';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-room',
@@ -13,15 +14,14 @@ export class RoomComponent implements OnInit {
   @Output() removeRoom = new EventEmitter<string>();
 
   constructor(
-    private socket: SocketService
+    private socket: SocketService,
+    private userService: UserService
   ) {
     let date = new Date();
     this.dateCurrent = `${date.getHours()}:${date.getMinutes()}`;
+    
+    this.user = userService.getUser();
 
-    let userCurrent: any = localStorage.getItem('userToken');
-    userCurrent = atob(userCurrent);
-    userCurrent = JSON.parse(userCurrent);
-    this.user = userCurrent.username;
   }
   dateCurrent;
   messages = []; 
@@ -33,7 +33,7 @@ export class RoomComponent implements OnInit {
     if (!this.message) {
       return alert('Вы не можете отправить пустое сообщение');
     }
-    await this.socket.emit('message', this.message).subscribe();
+    await this.socket.emit('message', [this.message, localStorage.getItem('userToken')]).subscribe();
     this.socket.on('message').subscribe(
       data => {
         this.messages.push(data);

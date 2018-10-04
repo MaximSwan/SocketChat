@@ -19,35 +19,45 @@ export class LoginComponent implements OnInit {
   login;
   password;
   toggleUserFail: boolean = false;
+  vk: boolean = false;
+
 
   logIn() {
     if (!this.login || !this.password) {
       return alert('Введите все данные');
     }
     let user = new User(this.login, this.password);
-    this.socket.emit('login', user).subscribe(
-      user => {
-        console.log('Success', user);
-      },
-      error => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    )
+    if (this.vk == true) {
+      this.socket.emit('loginVk', user).subscribe();
+
+      return this.socket.on('loginVk').subscribe(
+        userToken => {
+          if (userToken == 'Incorrect') {
+            return this.toggleUserFail = true;
+          }
+          localStorage.setItem('userToken', userToken);
+          this.router.navigate(['rooms'])
+        },
+        error => {
+          console.error(error);
+        }
+      )
+    }
+    this.socket.emit('login', user).subscribe();
+
     this.socket.on('login').subscribe(
-      userToken  => {
+      userToken => {
         if (userToken == 'Incorrect') {
           return this.toggleUserFail = true;
         }
-        localStorage.setItem('userToken', userToken );
+        localStorage.setItem('userToken', userToken);
         this.router.navigate(['rooms'])
       },
       error => {
         console.error(error);
       }
     )
+
   }
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from '../../../services/socket/socket.service';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-rooms',
@@ -9,15 +10,10 @@ import { SocketService } from '../../../services/socket/socket.service';
 export class RoomsComponent implements OnInit {
 
   constructor(
-    private socket: SocketService
+    private socket: SocketService,
+    private userService: UserService
   ) {
-    let userCurrent: any = localStorage.getItem('userToken');
-    if(userCurrent == null) {
-      return;
-    }
-    userCurrent = atob(userCurrent);
-    userCurrent = JSON.parse(userCurrent);
-    this.user = userCurrent.username;
+    this.user = userService.getUser();
 
     this.loadRooms();
 

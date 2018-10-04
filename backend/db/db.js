@@ -17,13 +17,17 @@ const User = mongoose.model('User', {
     type: String,
     required: true
   },
+  role: {
+    type: String,
+    require: true
+  }
 })
 
 const Room = mongoose.model('Room', {
-  name:{
+  name: {
     type: String,
     required: true
-}
+  }
 })
 
 module.exports = {
