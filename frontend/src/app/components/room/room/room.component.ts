@@ -19,12 +19,17 @@ export class RoomComponent implements OnInit {
   ) {
     let date = new Date();
     this.dateCurrent = `${date.getHours()}:${date.getMinutes()}`;
-    
-    this.user = userService.getUser();
 
+    this.user = userService.getUser();
+    this.socket.on('message').subscribe(
+      data => {
+        this.messages.push(data);
+        this.message = '';
+      }
+    )
   }
   dateCurrent;
-  messages = []; 
+  messages = [];
   message;
   user;
   toogleChat: boolean = false;
@@ -34,22 +39,6 @@ export class RoomComponent implements OnInit {
       return alert('Вы не можете отправить пустое сообщение');
     }
     await this.socket.emit('message', [this.message, localStorage.getItem('userToken')]).subscribe();
-    this.socket.on('message').subscribe(
-      data => {
-        this.messages.push(data);
-      }
-    )
-    //   this.socket.emit('message', this.message).subscribe(
-    //   data => {
-    //     console.log('Success', data);
-    //   },
-    //   error => {
-    //     console.log('Error', error);
-    //   },
-    //   () => {
-    //     console.log('complete');
-    //   }
-    // )
   }
 
   deleteThisRoom(room) {

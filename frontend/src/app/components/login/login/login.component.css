@@ -118,13 +118,10 @@ body {
 .main-signin .main-signin__foot .foot__right .face a:hover {
   background-color: #2d2f32;
 }
-.main-signin .main-signin__foot .foot__right .twit a {
-}
 .main-signin .main-signin__foot .foot__right .face a {
   border-radius: 0 0 10px 0;
 }
 
-/* Ñòèëè áàðà vladmaxi, ìîæíî óäàëèòü */
 .vladmaxi-top{
 	line-height: 24px;
 	font-size: 11px;

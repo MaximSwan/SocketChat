@@ -1,21 +1,19 @@
 <div *ngIf="toggle == true">
-<div class="container-fluid">
-  <div class="row">
-  <div>
-    вы можете
-  </div> 
-  &nbsp;
-  <div  routerLink="login" style="color: blue" >
-    войти в аккаунт
+  <div class="container-fluid">
+    <div class="row">
+      <div>
+        вы можете
+      </div>
+      &nbsp;
+      <div routerLink="login" style="color: blue">
+        войти в аккаунт
+      </div>
+      &nbsp; или &nbsp;
+      <div routerLink="register" style="color: blue">
+        зарегестрироваться
+      </div>
+      &nbsp;
+    </div>
   </div>
-  &nbsp;
-  или
-  &nbsp;
-  <div routerLink="register" style="color: blue" >
-     зарегестрироваться
-  </div>
-  &nbsp;
-  </div>
-</div>
 </div>
 <router-outlet></router-outlet>
