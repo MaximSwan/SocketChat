@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       return this.socket.on('loginVk').subscribe(
         userToken => {
           if (userToken == 'Incorrect') {
-            return this.toggleUserFail = true;
+            return this .toggleUserFail = true;
           }
           localStorage.setItem('userToken', userToken);
           this.router.navigate(['rooms'])
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
 
     this.socket.on('login').subscribe(
       userToken => {
-        if (userToken == 'Incorrect') {
+        if (userToken == 'Incorrect') {     
           return this.toggleUserFail = true;
         }
         localStorage.setItem('userToken', userToken);
