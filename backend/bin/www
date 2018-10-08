@@ -7,6 +7,8 @@ var passport = require('../routes/passport');
 var jwt = require('jsonwebtoken');
 var express = require('express');
 var rp = require('request-promise');
+require('dotenv').config();
+var vkToken = process.env.VKTOKEN;
 
 var vkAuth = require('vk-auth')(123456, 'audio');
 
@@ -45,7 +47,6 @@ io.on('connection', (socket) => {
       });
 
       vkAuth.on('auth', function (tokenParams) {
-        let vkToken = '501dde12c1bd125af8d3fbb19c03b29931362eb9faeeacf786924863d0b277e5ec1714e41122acb609c84';
         rp(`https://api.vk.com/method/users.get?user_id=${tokenParams.user_id}&v=5.52&access_token=${vkToken}`)
           .then(res => {
             res = Buffer.from(res).toString('base64');

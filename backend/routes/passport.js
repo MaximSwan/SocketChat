@@ -4,7 +4,7 @@ var bCrypt = require('bcryptjs');
 var db = require('../db/db.js');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
-  var vkAuth = require('vk-auth')(123456, 'audio');
+var vkAuth = require('vk-auth')(123456, 'audio');
 
 var isValidPassword = function (user, password) {
   return bCrypt.compareSync(password, user.password);
@@ -15,7 +15,7 @@ var createHash = function (password) {
 router.use(passport.initialize());
 router.use(passport.session());
 
-passport.serializeUser(function (user , cb) {
+passport.serializeUser(function (user, cb) {
   cb(null, user.id);
 });
 
@@ -51,22 +51,22 @@ let signUp = (username, password, done) => {
   });
 }
 
-let logInVk = async(login, password) => { 
-let us = vkAuth.authorize(login, password);
+let logInVk = async (login, password) => {
+  vkAuth.authorize(login, password);
 
-  vkAuth.on('error', function(err) {
+  vkAuth.on('error', function (err) {
     return 'Incorrect'
-});
- 
-vkAuth.on('auth', function(tokenParams) {
-  return tokenParams;
+  });
+
+  vkAuth.on('auth', function (tokenParams) {
+    return tokenParams;
   })
 }
 
 let logIn = async (username, password) => {
   try {
     let user = await db.User.findOne({ username: username });
-    
+
     if (!user) {
       return 'Incorrect';
     }
