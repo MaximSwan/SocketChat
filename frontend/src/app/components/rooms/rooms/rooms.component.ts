@@ -13,6 +13,7 @@ export class RoomsComponent implements OnInit {
     private socket: SocketService,
     private userService: UserService
   ) {
+
     this.user = userService.getUser();
 
     this.loadRooms();
@@ -20,6 +21,13 @@ export class RoomsComponent implements OnInit {
     socket.on('roomDelete').subscribe(
       data => {
         this.rooms.splice(this.rooms.indexOf(data), 1);
+      }
+    )
+
+    this.socket.on('message').subscribe(
+      data => {
+        this.messages.push(data);
+        this.message = '';
       }
     )
 
@@ -40,18 +48,35 @@ export class RoomsComponent implements OnInit {
     );
 
   }
-
+  messages = [];
+  message;
+  toggleWin: boolean = false;
   toggleAdd: boolean = false;
   nameRoom;
   rooms = [];
+  names = [];
   user;
-  
+
   loadRooms() {
     this.socket.emit('rooms', 'getRooms').subscribe();
   }
 
   onRemoveRoom(event) {
     this.socket.emit('roomDelete', event).subscribe();
+  }
+
+  onGetRoom(event) {
+    this.toggleWin = true;
+    this.names.splice(0, this.names.length);
+    this.names.push(event);
+    this.messages.splice(0, this.messages.length);
+  }
+
+  async writeMessage() {
+    if (!this.message) {
+      return alert('Вы не можете отправить пустое сообщение');
+    }
+    await this.socket.emit('message', [this.message, localStorage.getItem('userToken')]).subscribe();
   }
 
   addRoom() {

@@ -8,7 +8,30 @@
   <button (click)="addRoom()" class="btn-primary">Creat Room</button>
 </div>
 <p>Rooms list:</p>
-<app-room (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
+<app-room (getRoom)="onGetRoom($event)" (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
+
+<div *ngIf="toggleWin == true">
+  <div *ngFor="let name of names" >
+    <div class="card">
+      {{name}}
+        <div class="card-body">
+          <div *ngFor="let message of messages">
+            <p class="card-text"> {{user}} : {{message}}
+              <span style="margin-left: 59px;"> {{dateCurrent}} </span>
+            </p>
+          </div>
+          <div class="input-group mb-3">
+            <input [(ngModel)]="message" type="text" class="form-control" placeholder="Ваше сообщение..." aria-label="Recipient's username"
+              aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button (click)="writeMessage()" class="btn btn-outline-secondary" type="button" id="button-addon2">Отправить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
 </div>
 
 <div *ngIf="user == null" >

@@ -13,6 +13,8 @@ export class RoomComponent implements OnInit {
 
   @Output() removeRoom = new EventEmitter<string>();
 
+  @Output() getRoom = new EventEmitter<string>();
+
   constructor(
     private socket: SocketService,
     private userService: UserService
@@ -21,12 +23,6 @@ export class RoomComponent implements OnInit {
     this.dateCurrent = `${date.getHours()}:${date.getMinutes()}`;
 
     this.user = userService.getUser();
-    this.socket.on('message').subscribe(
-      data => {
-        this.messages.push(data);
-        this.message = '';
-      }
-    )
   }
   dateCurrent;
   messages = [];
@@ -43,6 +39,10 @@ export class RoomComponent implements OnInit {
 
   deleteThisRoom(room) {
     this.removeRoom.emit(room);
+  }
+
+  getThisRoom(room) {
+    this.getRoom.emit(room);
   }
 
   ngOnInit() {
