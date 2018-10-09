@@ -10,8 +10,11 @@
 <p>Rooms list:</p>
 <app-room (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
 </div>
+
 <div *ngIf="user == null" >
   <span>
     Чтобы видеть и заходить в комнаты, <p style="color: blue" routerLink="/login"> Авторизируйтесь</p> 
 </span>
   </div>
+
+  

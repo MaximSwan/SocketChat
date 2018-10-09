@@ -3,11 +3,13 @@ var db = require('../db/db');
 var debug = require('debug')('backend:server');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var passport = require('../routes/passport');
+var passport = require('../functions/passport');
 var jwt = require('jsonwebtoken');
 var express = require('express');
 var rp = require('request-promise');
 require('dotenv').config();
+var roomFunc = require('../functions/room');
+var messageFunc = require('../functions/message');
 var vkToken = process.env.VKTOKEN;
 
 var vkAuth = require('vk-auth')(123456, 'audio');
@@ -61,10 +63,7 @@ io.on('connection', (socket) => {
   socket.on('room', async data => {
     try {
       passport.checkBody(data);
-      let room = new db.Room();
-      room.name = data;
-      room.validate();
-      await room.save();
+      let room = await roomFunc.creatRoom(data);
       io.emit('room', room);
     } catch (err) {
       console.error(err);
@@ -90,12 +89,7 @@ io.on('connection', (socket) => {
   socket.on('message', async data => {
     try {
       passport.checkBody(data);
-      let token = data[1];
-      if (!token || token == null || token == undefined) {
-        return;
-      }
-      token = Buffer.from(token, 'base64').toString();
-      token = JSON.parse(token);
+      token = await messageFunc.sendMessage(data);
       if (token.response) {
         return io.emit('message', data[0]);
       }
