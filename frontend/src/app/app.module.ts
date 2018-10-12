@@ -8,13 +8,13 @@ import { SocketService } from './services/socket/socket.service';
 import { LoginComponent } from './components/login/login/login.component';
 import { RegisterComponent } from './components/register/register/register.component';
 
-import {FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { RoomsComponent } from './components/rooms/rooms/rooms.component';
 import { RoomComponent } from './components/room/room/room.component';
 const appRoute: Routes = [
   {
-    path:'rooms',
+    path: 'rooms',
     component: RoomsComponent
   },
   {

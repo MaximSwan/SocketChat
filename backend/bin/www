@@ -104,6 +104,7 @@ io.on('connection', (socket) => {
       })
       socket.on('disconnectRoom', room => {
         socket.leave(room);
+        io.to(room).emit('message', 'I leave');
       })
     } catch (err) {
       console.log(err);

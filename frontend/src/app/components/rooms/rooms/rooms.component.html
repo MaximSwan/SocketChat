@@ -1,20 +1,21 @@
-
 <div *ngIf="user">
-<p style="color: blue">Вы вошли как : {{user}} </p>
-<p (click)="logOut()" routerLink="/login" style="color: red" >Выйти</p>
-<button class="btn-primary" (click)="toggleAdd = !toggleAdd;">add room</button>
-<div *ngIf="toggleAdd == true">
-  <input [(ngModel)]="nameRoom" type="text" placeholder="имя комнаты">
-  <button (click)="addRoom()" class="btn-primary">Creat Room</button>
-</div>
-<p>Rooms list:</p>
-<app-room  (getRoom)="onGetRoom($event)" (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
 
-<div *ngIf="toggleWin == true">
-  <div *ngFor="let name of names" >
-    <div class="card">
-     Название комнаты:{{name}}
-     <p style="color: red" (click)="onLeavRoom()" >Leav room</p>
+  <p style="color: blue">Вы вошли как : {{user}} </p>
+  <p (click)="logOut()" routerLink="/login" style="color: red">Выйти</p>
+  <button class="btn-primary" (click)="toggleAdd = !toggleAdd;">add room</button>
+  <div *ngIf="toggleAdd == true">
+    <input [(ngModel)]="nameRoom" type="text" placeholder="имя комнаты">
+    <button (click)="addRoom()" class="btn-primary">Creat Room</button>
+  </div>
+  <p>Rooms list:</p>
+  <div *ngIf="toggleList == false">
+    <app-room (getRoom)="onGetRoom($event)" (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
+  </div>
+  <div *ngIf="toggleWin == true">
+    <div *ngFor="let name of names">
+      <div class="card">
+        Название комнаты:{{name}}
+        <p style="color: red" (click)="onLeavRoom()">Leav room</p>
         <div class="card-body">
           <div *ngFor="let message of messages">
             <p class="card-text"> {{user}} : {{message}}
@@ -30,15 +31,14 @@
           </div>
         </div>
       </div>
+    </div>
   </div>
-</div>
 
 </div>
 
-<div *ngIf="user == null" >
+<div *ngIf="user == null">
   <span>
-    Чтобы видеть и заходить в комнаты, <p style="color: blue" routerLink="/login"> Авторизируйтесь</p> 
-</span>
-  </div>
-
-  
+    Чтобы видеть и заходить в комнаты,
+    <p style="color: blue" routerLink="/login"> Авторизируйтесь</p>
+  </span>
+</div>

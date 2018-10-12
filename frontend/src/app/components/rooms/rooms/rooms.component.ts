@@ -52,6 +52,7 @@ export class RoomsComponent implements OnInit {
   message;
   toggleWin: boolean = false;
   toggleAdd: boolean = false;
+  toggleList: boolean = false;
   nameRoom;
   rooms = [];
   names = [];
@@ -72,12 +73,14 @@ export class RoomsComponent implements OnInit {
     this.messages.splice(0, this.messages.length);
     this.nameRoom = event;
     this.socket.emit('connectRoom', event).subscribe();
+    this.toggleList = true;
   }
 
   onLeavRoom() {
     this.toggleWin = false;
     console.log(this.nameRoom);
     this.socket.emit('disconnectRoom', this.nameRoom).subscribe();
+    this.toggleList = false;
   }
 
   async writeMessage() {
