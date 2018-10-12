@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
     )
     this.login = '';
     this.password = '';
-    this.toggleSignup = true
+    this.toggleSignup = true;
   }
 
   ngOnInit() {

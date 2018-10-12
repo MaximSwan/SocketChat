@@ -8,12 +8,13 @@
   <button (click)="addRoom()" class="btn-primary">Creat Room</button>
 </div>
 <p>Rooms list:</p>
-<app-room (getRoom)="onGetRoom($event)" (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
+<app-room  (getRoom)="onGetRoom($event)" (removeRoom)="onRemoveRoom($event)" [myRoom]="room" *ngFor="let room of rooms"> </app-room>
 
 <div *ngIf="toggleWin == true">
   <div *ngFor="let name of names" >
     <div class="card">
-      {{name}}
+     Название комнаты:{{name}}
+     <p style="color: red" (click)="onLeavRoom()" >Leav room</p>
         <div class="card-body">
           <div *ngFor="let message of messages">
             <p class="card-text"> {{user}} : {{message}}

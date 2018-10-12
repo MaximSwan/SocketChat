@@ -15,6 +15,8 @@ export class RoomComponent implements OnInit {
 
   @Output() getRoom = new EventEmitter<string>();
 
+  @Output() leaveRoom = new EventEmitter<string>();
+
   constructor(
     private socket: SocketService,
     private userService: UserService

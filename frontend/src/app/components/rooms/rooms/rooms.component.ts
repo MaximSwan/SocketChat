@@ -70,6 +70,14 @@ export class RoomsComponent implements OnInit {
     this.names.splice(0, this.names.length);
     this.names.push(event);
     this.messages.splice(0, this.messages.length);
+    this.nameRoom = event;
+    this.socket.emit('connectRoom', event).subscribe();
+  }
+
+  onLeavRoom() {
+    this.toggleWin = false;
+    console.log(this.nameRoom);
+    this.socket.emit('disconnectRoom', this.nameRoom).subscribe();
   }
 
   async writeMessage() {

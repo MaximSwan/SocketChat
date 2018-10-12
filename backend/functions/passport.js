@@ -37,7 +37,6 @@ let signUp = (username, password, done) => {
     } else {
 
       let newUser = new db.User();
-
       newUser.username = username;
       newUser.password = createHash(password);
       newUser.role = 'User';

@@ -11,7 +11,6 @@ require('dotenv').config();
 var roomFunc = require('../functions/room');
 var messageFunc = require('../functions/message');
 var vkToken = process.env.VKTOKEN;
-
 var vkAuth = require('vk-auth')(123456, 'audio');
 
 io.on('connection', (socket) => {
@@ -86,23 +85,30 @@ io.on('connection', (socket) => {
       console.error(err);
     }
   })
-  socket.on('message', async data => {
+
+  socket.on('connectRoom', room => {
     try {
-      passport.checkBody(data);
-      token = await messageFunc.sendMessage(data);
-      if (token.response) {
-        return io.emit('message', data[0]);
-      }
-      let user = await db.User.findOne({ username: token.username });
-      if (user.role == 'User') {
-        io.emit('message', data[0]);
-      }
-      passport.logInVk();
+      socket.join(room);
+      io.to(room).emit('message', 'I connected to the room');
+      socket.on('message', async data => {
+        passport.checkBody(data);
+        token = await messageFunc.sendMessage(data);
+        if (token.response) {
+          return io.to(room).emit('message', data[0]);
+        }
+        let user = await db.User.findOne({ username: token.username });
+        if (user.role == 'User') {
+          return io.to(room).emit('message', data[0]);
+        }
+        passport.logInVk();
+      })
+      socket.on('disconnectRoom', room => {
+        socket.leave(room);
+      })
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   })
-
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
