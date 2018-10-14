@@ -14,11 +14,6 @@ export class SocketService {
       console.log(`ERROR: '${error}' (${this.host})`);
     });
   }
-  messages = [];
-
-  message(data) {
-    
-  }
 
   connect() {
     this.socket.connect();
