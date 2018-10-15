@@ -1,5 +1,6 @@
 var db = require('../db/db');
 var passport = require('../functions/passport');
+var messageFunc = require('../functions/message');
 
 let creatRoom = async data => {
   try {
@@ -36,6 +37,32 @@ let deleteRoom = async data => {
   }
 }
 
+let connectRoom = async data => {
+  passport.checkBody(data);
+  var io = data[0];
+  var socket = data[1];
+  var room = data[2];
+  socket.join(room);
+  io.to(room).emit('message', 'I connected to the room');
+  socket.on('message', async data => {
+    passport.checkBody(data);
+    token = await messageFunc.sendMessage(data);
+    if (token.response) {
+      return io.to(room).emit('message', data[0]);
+    }
+    let user = await db.User.findOne({ username: token.username });
+    if (user.role == 'User') {
+      return io.to(room).emit('message', data[0]);
+    }
+    passport.logInVk();
+  })
+  socket.on('disconnectRoom', room => {
+    socket.leave(room);
+    io.to(room).emit('message', 'I leave');
+  })
+}
+
 module.exports.creatRoom = creatRoom;
 module.exports.getRooms = getRooms;
 module.exports.deleteRoom = deleteRoom;
+module.exports.connectRoom = connectRoom;
