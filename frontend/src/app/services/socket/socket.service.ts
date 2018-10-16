@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as io from 'socket.io-client';
+import { User } from '../user/user.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class SocketService {
 
   constructor(
+    private router: Router
   ) {
     this.socket = io(this.host);
     this.socket.on('connect', () => this.connect());
@@ -13,7 +16,88 @@ export class SocketService {
     this.socket.on('error', (error: string) => {
       console.log(`ERROR: '${error}' (${this.host})`);
     });
+
+    this.on('loginVk').subscribe(
+      token => {
+        if (token == 'Incorrect') {
+          return this.toggleUserFail = true;
+        }
+        localStorage.setItem('userToken', token);
+        this.router.navigate(['rooms'])
+      },
+      error => {
+        console.error(error);
+      }
+    )
+
+    this.on('login').subscribe(
+      token => {
+        if (token == 'Incorrect') {
+          return this.toggleUserFail = true;
+        }
+        localStorage.setItem('userToken', token);
+        this.router.navigate(['rooms'])
+      },
+      error => {
+        console.error(error);
+      }
+    )
+
+    this.on('message').subscribe(
+      data => {
+        this.messages.push(data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    )
+
+    this.on('rooms').subscribe(
+      data => {
+        this.rooms.splice(0, this.rooms.length);
+        for (let i = 0; i < data.length; i++) {
+          const elem = data[i];
+          this.rooms.push(elem.name);
+        }
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    );
+    this.on('room').subscribe(
+      data => {
+        this.rooms.push(data.name);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    );
+    this.on('roomDelete').subscribe(
+      data => {
+        this.rooms.splice(this.rooms.indexOf(data), 1);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    )
+
   }
+
+  rooms = [];
+  messages = [];
+  toggleUserFail: boolean = false;
 
   connect() {
     this.socket.connect();
@@ -43,6 +127,125 @@ export class SocketService {
         observer.next(data);
       });
     });
+  }
+
+  addRoomNow(nameRoom) {
+    this.emit('room', nameRoom).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
+  }
+
+  onRemoveRoomNow(event) {
+    this.emit('roomDelete', event).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
+  }
+
+  loadRoomsNow() {
+    this.emit('rooms', 'getRooms').subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
+  }
+
+   getThisRoom(event) {
+    return this.emit('connectRoom', event).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    );
+  } 
+
+   writeMessageNow(message) {
+    return this.emit('message', [message, localStorage.getItem('userToken')]).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
+  }
+
+  onLeaveRoomNow(nameRoom) {
+    this.emit('disconnectRoom', nameRoom).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
+  }
+
+  signUpNow(user: User) {
+    this.emit('register', user).subscribe(
+      (user) => {
+        console.log('Success', user);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    )
+  }
+
+  logInNow(user) {
+    this.emit('login', user).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
+  }
+
+  logInNowVk(user) {
+    this.emit('loginVk', user).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      });
   }
 
   private host: string = 'http://localhost:3000';

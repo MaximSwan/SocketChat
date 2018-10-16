@@ -22,13 +22,11 @@ module.exports = function (server) {
 
     socket.on('rooms', data => { roomFunc.getRooms([io, data]) });
 
-    socket.on('roomDelete', data => { roomFunc.deleteRoom([io, data]) })
+    socket.on('roomDelete', data => { roomFunc.deleteRoom([io, data]) });
 
     socket.on('connectRoom', room => { roomFunc.connectRoom([io, socket, room]) })
-    
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
+
+    socket.on('disconnect', () => { console.log('user disconnected'); });
 
   })
 }

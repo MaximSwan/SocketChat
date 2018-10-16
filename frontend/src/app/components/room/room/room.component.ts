@@ -32,23 +32,6 @@ export class RoomComponent implements OnInit {
   user;
   toogleChat: boolean = false;
 
-  async writeMessage() {
-    if (!this.message) {
-      return alert('Вы не можете отправить пустое сообщение');
-    }
-    await this.socket.emit('message', [this.message, localStorage.getItem('userToken')]).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    );
-  }
-
   deleteThisRoom(room) {
     this.removeRoom.emit(room);
   }

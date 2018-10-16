@@ -25,17 +25,7 @@ export class RegisterComponent implements OnInit {
       return alert('Введите все данные')
     }
     let user = new User(this.login, this.password);
-    this.socket.emit('register', user).subscribe(
-      (user) => {
-        console.log('Success', user);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    )
+    this.socket.signUpNow(user);
     this.login = '';
     this.password = '';
     this.toggleSignup = true;
