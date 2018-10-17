@@ -10,7 +10,7 @@ import { UserService } from '../../../services/user/user.service';
 export class RoomsComponent implements OnInit {
 
   constructor(
-    private socket: SocketService,
+    private socketService: SocketService,
     private userService: UserService
   ) {
 
@@ -18,24 +18,28 @@ export class RoomsComponent implements OnInit {
 
     this.loadRooms();
 
+    let date = new Date();
+    this.dateCurrent = `${date.getHours()}:${date.getMinutes()}`;
+
   }
 
-  messages = this.socket.messages;
+  messages = this.socketService.messages;
   message;
+  dateCurrent;
   toggleWin: boolean = false;
   toggleAdd: boolean = false;
   toggleList: boolean = false;
   nameRoom;
-  rooms = this.socket.rooms;
+  rooms = this.socketService.rooms;
   names = [];
   user;
 
   loadRooms() {
-    this.socket.loadRoomsNow();
+    this.socketService.loadRoomsNow();
   }
 
   onRemoveRoom(event) {
-    this.socket.onRemoveRoomNow(event);
+    this.socketService.onRemoveRoomNow(event);
   }
 
   onGetRoom(event) {
@@ -44,13 +48,13 @@ export class RoomsComponent implements OnInit {
     this.names.push(event);
     this.messages.splice(0, this.messages.length);
     this.nameRoom = event;
-    this.socket.getThisRoom(event);
+    this.socketService.getThisRoom(event);
     this.toggleList = true;
   }
 
   onLeavRoom() {
     this.toggleWin = false;
-    this.socket.onLeaveRoomNow(this.nameRoom);
+    this.socketService.onLeaveRoomNow(this.nameRoom);
     this.toggleList = false;
   }
 
@@ -58,13 +62,13 @@ export class RoomsComponent implements OnInit {
     if (!this.message) {
       return alert('Вы не можете отправить пустое сообщение');
     }
-    this.socket.writeMessageNow(this.message);
+    this.socketService.writeMessageNow(this.message);
     this.message = '';
       
   }
 
   addRoom() {
-    this.socket.addRoomNow(this.nameRoom);
+    this.socketService.addRoomNow(this.nameRoom);
   }
 
   logOut() {

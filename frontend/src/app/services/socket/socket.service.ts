@@ -40,7 +40,7 @@ export class SocketService {
       },
       error => {
         console.error(error);
-      }
+      },
     )
 
     this.on('message').subscribe(
@@ -50,12 +50,9 @@ export class SocketService {
       (error) => {
         console.log('Error', error);
       },
-      () => {
-        console.log('complete');
-      }
     )
 
-    this.on('rooms').subscribe(
+    this.on('getRooms').subscribe(
       data => {
         this.rooms.splice(0, this.rooms.length);
         for (let i = 0; i < data.length; i++) {
@@ -70,7 +67,7 @@ export class SocketService {
         console.log('complete');
       }
     );
-    this.on('room').subscribe(
+    this.on('createRoom').subscribe(
       data => {
         this.rooms.push(data.name);
       },
@@ -81,7 +78,7 @@ export class SocketService {
         console.log('complete');
       }
     );
-    this.on('roomDelete').subscribe(
+    this.on('deleteRoom').subscribe(
       data => {
         this.rooms.splice(this.rooms.indexOf(data), 1);
       },
@@ -130,7 +127,7 @@ export class SocketService {
   }
 
   addRoomNow(nameRoom) {
-    this.emit('room', nameRoom).subscribe(
+    this.emit('createRoom', nameRoom).subscribe(
       (data) => {
         console.log('Success', data);
       },
@@ -143,7 +140,7 @@ export class SocketService {
   }
 
   onRemoveRoomNow(event) {
-    this.emit('roomDelete', event).subscribe(
+    this.emit('deleteRoom', event).subscribe(
       (data) => {
         console.log('Success', data);
       },
@@ -156,7 +153,7 @@ export class SocketService {
   }
 
   loadRoomsNow() {
-    this.emit('rooms', 'getRooms').subscribe(
+    this.emit('getRooms', 'getRooms').subscribe(
       (data) => {
         console.log('Success', data);
       },
@@ -168,7 +165,7 @@ export class SocketService {
       });
   }
 
-   getThisRoom(event) {
+  getThisRoom(event) {
     return this.emit('connectRoom', event).subscribe(
       (data) => {
         console.log('Success', data);
@@ -180,9 +177,9 @@ export class SocketService {
         console.log('complete');
       }
     );
-  } 
+  }
 
-   writeMessageNow(message) {
+  writeMessageNow(message) {
     return this.emit('message', [message, localStorage.getItem('userToken')]).subscribe(
       (data) => {
         console.log('Success', data);

@@ -18,12 +18,8 @@ export class RoomComponent implements OnInit {
   @Output() leaveRoom = new EventEmitter<string>();
 
   constructor(
-    private socket: SocketService,
     private userService: UserService
   ) {
-    let date = new Date();
-    this.dateCurrent = `${date.getHours()}:${date.getMinutes()}`;
-
     this.user = userService.getUser();
   }
   dateCurrent;

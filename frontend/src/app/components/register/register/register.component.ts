@@ -10,7 +10,7 @@ import { User } from '../../../services/user/user.service';
 export class RegisterComponent implements OnInit {
 
   constructor(
-    private socket: SocketService,
+    private socketService: SocketService,
   ) { }
 
   login;
@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
       return alert('Введите все данные')
     }
     let user = new User(this.login, this.password);
-    this.socket.signUpNow(user);
+    this.socketService.signUpNow(user);
     this.login = '';
     this.password = '';
     this.toggleSignup = true;

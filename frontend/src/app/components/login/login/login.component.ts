@@ -10,13 +10,13 @@ import { User } from '../../../services/user/user.service';
 export class LoginComponent implements OnInit {
 
   constructor(
-    private socket: SocketService,
+    private socketService: SocketService,
   ) {
   }
 
   login;
   password;
-  toggleUserFail = this.socket.toggleUserFail;
+  toggleUserFail = this.socketService.toggleUserFail;
   vk: boolean = false;
 
   async logIn() {
@@ -25,9 +25,9 @@ export class LoginComponent implements OnInit {
     }
     let user = new User(this.login, this.password);
     if (this.vk == true) {
-      this.socket.logInNowVk(user);
-    } else {
-      this.socket.logInNow(user);
+      this.socketService.logInNowVk(user);
+    } else {  
+      this.socketService.logInNow(user);
     }
 
   }

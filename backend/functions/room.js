@@ -10,7 +10,7 @@ let creatRoom = async data => {
     room.name = data[1];
     room.validate();
     await room.save();
-    io.emit('room', room);
+    io.emit('createRoom', room);
   } catch (err) {
     console.log(err);
   }
@@ -20,7 +20,7 @@ let getRooms = async data => {
   try {
     var io = data[0];
     let rooms = await db.Room.find({});
-    io.emit('rooms', rooms);
+    io.emit('getRooms', rooms);
   } catch (err) {
     console.error(err);
   }
@@ -31,7 +31,7 @@ let deleteRoom = async data => {
     passport.checkBody(data);
     var io = data[0];
     let roomDeleted = await db.Room.findOneAndRemove({ name: data[1] });
-    io.emit('roomDelete', roomDeleted);
+    io.emit('deleteRoom', roomDeleted);
   } catch (err) {
     console.error(err);
   }
@@ -56,13 +56,18 @@ let connectRoom = async data => {
     }
     passport.logInVk();
   })
-  socket.on('disconnectRoom', room => {
-    socket.leave(room);
-    io.to(room).emit('message', 'I leave');
-  })
+}
+
+let disconnectRoom = data => {
+  let socket = data[1];
+  let io = data[0];
+  let room = data[2];
+  socket.leave(room);
+  io.to(room).emit('message', 'I leave');
 }
 
 module.exports.creatRoom = creatRoom;
 module.exports.getRooms = getRooms;
 module.exports.deleteRoom = deleteRoom;
 module.exports.connectRoom = connectRoom;
+module.exports.disconnectRoom = disconnectRoom;

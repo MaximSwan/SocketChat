@@ -2,7 +2,7 @@ module.exports = function (server) {
   require('dotenv').config();
   var db = require('../db/db');
   var rp = require('request-promise');
-  var userFunc = require('../functions/user')
+  var userFunc = require('../functions/user');
   var roomFunc = require('../functions/room');
   var messageFunc = require('../functions/message');
   var passport = require('../functions/passport');
@@ -18,13 +18,15 @@ module.exports = function (server) {
 
     socket.on('loginVk', data => { userFunc.authenticationVk([io, data]) });
 
-    socket.on('room', data => { roomFunc.creatRoom([io, data]) });
+    socket.on('createRoom', data => { roomFunc.creatRoom([io, data]) });
 
-    socket.on('rooms', data => { roomFunc.getRooms([io, data]) });
+    socket.on('getRooms', data => { roomFunc.getRooms([io, data]) });
 
-    socket.on('roomDelete', data => { roomFunc.deleteRoom([io, data]) });
+    socket.on('deleteRoom', data => { roomFunc.deleteRoom([io, data]) });
 
-    socket.on('connectRoom', room => { roomFunc.connectRoom([io, socket, room]) })
+    socket.on('connectRoom', room => { roomFunc.connectRoom([io, socket, room]) });
+
+    socket.on('disconnectRoom', room => { roomFunc.disconnectRoom([io, socket, room]) });
 
     socket.on('disconnect', () => { console.log('user disconnected'); });
 
