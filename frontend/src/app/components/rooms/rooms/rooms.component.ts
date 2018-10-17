@@ -29,6 +29,7 @@ export class RoomsComponent implements OnInit {
   toggleWin: boolean = false;
   toggleAdd: boolean = false;
   toggleList: boolean = false;
+  states = [];
   nameRoom;
   rooms = this.socketService.rooms;
   names = [];
@@ -62,9 +63,13 @@ export class RoomsComponent implements OnInit {
     if (!this.message) {
       return alert('Вы не можете отправить пустое сообщение');
     }
-    this.socketService.writeMessageNow(this.message);
+    this.socketService.writeMessageNow(this.message,this.nameRoom);
     this.message = '';
       
+  }
+
+  checkWrite() {
+    console.log('feawfwfawefawtttttt12313123');
   }
 
   addRoom() {

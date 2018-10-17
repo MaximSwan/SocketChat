@@ -28,6 +28,8 @@ module.exports = function (server) {
 
     socket.on('disconnectRoom', room => { roomFunc.disconnectRoom([io, socket, room]) });
 
+    socket.on('message', data => { roomFunc.addMessage([io, socket, data]) });
+
     socket.on('disconnect', () => { console.log('user disconnected'); });
 
   })

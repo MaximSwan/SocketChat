@@ -179,8 +179,8 @@ export class SocketService {
     );
   }
 
-  writeMessageNow(message) {
-    return this.emit('message', [message, localStorage.getItem('userToken')]).subscribe(
+  writeMessageNow(message, nameRoom) {
+    return this.emit('message', [message, localStorage.getItem('userToken'), nameRoom]).subscribe(
       (data) => {
         console.log('Success', data);
       },

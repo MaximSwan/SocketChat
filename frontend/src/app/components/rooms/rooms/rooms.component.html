@@ -16,6 +16,9 @@
       <div class="card">
         Название комнаты:{{name}}
         <p style="color: red" (click)="onLeavRoom()">Leav room</p>
+        <div *ngFor="let state of states">
+          <p>  {{user}} writes...  </p>
+        </div>
         <div class="card-body">
           <div *ngFor="let message of messages">
             <p class="card-text"> {{user}} : {{message}}
@@ -23,7 +26,7 @@
             </p>
           </div>
           <div class="input-group mb-3">
-            <input [(ngModel)]="message" type="text" class="form-control" placeholder="Ваше сообщение..." aria-label="Recipient's username"
+            <input (ngModelChange)="checkWrite()" [(ngModel)]="message" type="text" class="form-control" placeholder="Ваше сообщение..." aria-label="Recipient's username"
               aria-describedby="button-addon2">
             <div class="input-group-append">
               <button (click)="writeMessage()" class="btn btn-outline-secondary" type="button" id="button-addon2">Отправить</button>

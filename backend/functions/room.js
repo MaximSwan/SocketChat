@@ -38,24 +38,39 @@ let deleteRoom = async data => {
 }
 
 let connectRoom = async data => {
-  passport.checkBody(data);
-  var io = data[0];
-  var socket = data[1];
-  var room = data[2];
-  socket.join(room);
-  io.to(room).emit('message', 'I connected to the room');
-  socket.on('message', async data => {
+  try {
     passport.checkBody(data);
-    token = await messageFunc.sendMessage(data);
+    var io = data[0];
+    var socket = data[1];
+    var room = data[2];
+    socket.join(room);
+    io.to(room).emit('message', 'I connected to the room');
+    socket.on('message', async data => {
+    })
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+let addMessage = async data => {
+  try {
+    passport.checkBody(data);
+    let state = data[2];
+    let io = data[0];
+    let socket = data[1];
+    let room = state[2];
+    token = await messageFunc.sendMessage(state);
     if (token.response) {
-      return io.to(room).emit('message', data[0]);
+      return io.to(room).emit('message', state[0]);
     }
     let user = await db.User.findOne({ username: token.username });
     if (user.role == 'User') {
-      return io.to(room).emit('message', data[0]);
+      return io.to(room).emit('message', state[0]);
     }
     passport.logInVk();
-  })
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 let disconnectRoom = data => {
@@ -70,4 +85,5 @@ module.exports.creatRoom = creatRoom;
 module.exports.getRooms = getRooms;
 module.exports.deleteRoom = deleteRoom;
 module.exports.connectRoom = connectRoom;
+module.exports.addMessage = addMessage;
 module.exports.disconnectRoom = disconnectRoom;
