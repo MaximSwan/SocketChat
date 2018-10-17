@@ -81,9 +81,17 @@ let disconnectRoom = data => {
   io.to(room).emit('message', 'I leave');
 }
 
+let checkMessageNow = data => {
+  let io = data[0];
+  let socket = data[1];
+  let room = data[2];
+  io.to(room).emit('checkMessage', 'not Empty');
+}
+
 module.exports.creatRoom = creatRoom;
 module.exports.getRooms = getRooms;
 module.exports.deleteRoom = deleteRoom;
 module.exports.connectRoom = connectRoom;
 module.exports.addMessage = addMessage;
 module.exports.disconnectRoom = disconnectRoom;
+module.exports.checkMessageNow = checkMessageNow;

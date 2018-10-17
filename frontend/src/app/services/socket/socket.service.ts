@@ -90,9 +90,23 @@ export class SocketService {
       }
     )
 
+    this.on('checkMessage').subscribe(
+      data => {
+        this.states.splice(0, this.states.length);
+        this.states.push(data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    )
+
   }
 
   rooms = [];
+  states = [];
   messages = [];
   toggleUserFail: boolean = false;
 
@@ -243,6 +257,20 @@ export class SocketService {
       () => {
         console.log('complete');
       });
+  }
+
+  chekStateMessage(nameRoom) {
+    this.emit('checkMessage', nameRoom).subscribe(
+      (data) => {
+        console.log('Success', data);
+      },
+      (error) => {
+        console.log('Error', error);
+      },
+      () => {
+        console.log('complete');
+      }
+    );
   }
 
   private host: string = 'http://localhost:3000';
