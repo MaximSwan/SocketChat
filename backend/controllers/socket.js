@@ -2,9 +2,9 @@ module.exports = function (server) {
   require('dotenv').config();
   var db = require('../db/db');
   var rp = require('request-promise');
-  var userFunc = require('../functions/user');
-  var roomFunc = require('../functions/room');
-  var messageFunc = require('../functions/message');
+  var userFunc = require('./user');
+  var roomFunc = require('./room');
+  var messageFunc = require('./message');
   var passport = require('../functions/passport');
   var io = require('socket.io')(server);
 
@@ -33,6 +33,6 @@ module.exports = function (server) {
     socket.on('checkMessage', data => { roomFunc.checkMessageNow([io, socket, data]) })
 
     socket.on('disconnect', () => { console.log('user disconnected'); });
-
+      
   })
 }

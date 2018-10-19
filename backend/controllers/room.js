@@ -1,10 +1,13 @@
 var db = require('../db/db');
-var passport = require('../functions/passport');
-var messageFunc = require('../functions/message');
+var passport = require('./passport');
+var messageFunc = require('./message');
 
 let creatRoom = async data => {
   try {
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     var io = data[0];
     let room = new db.Room();
     room.name = data[1];
@@ -18,7 +21,10 @@ let creatRoom = async data => {
 
 let getRooms = async data => {
   try {
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     var io = data[0];
     let rooms = await db.Room.find({});
     io.emit('getRooms', rooms);
@@ -29,7 +35,10 @@ let getRooms = async data => {
 
 let deleteRoom = async data => {
   try {
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     var io = data[0];
     let roomDeleted = await db.Room.findOneAndRemove({ name: data[1] });
     io.emit('deleteRoom', roomDeleted);
@@ -40,7 +49,10 @@ let deleteRoom = async data => {
 
 let connectRoom = async data => {
   try {
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     var io = data[0];
     var socket = data[1];
     var room = data[2];
@@ -55,7 +67,10 @@ let connectRoom = async data => {
 
 let addMessage = async data => {
   try {
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     let state = data[2];
     let io = data[0];
     let socket = data[1];
@@ -75,20 +90,34 @@ let addMessage = async data => {
 }
 
 let disconnectRoom = data => {
-  passport.checkBody(data);
-  let socket = data[1];
-  let io = data[0];
-  let room = data[2];
-  socket.leave(room);
-  io.to(room).emit('message', 'I leave');
+  try {
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
+    let socket = data[1];
+    let io = data[0];
+    let room = data[2];
+    socket.leave(room);
+    io.to(room).emit('message', 'I leave');
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 let checkMessageNow = data => {
-  passport.checkBody(data);
-  let io = data[0];
-  let socket = data[1];
-  let room = data[2];
-  io.to(room).emit('checkMessage', 'not Empty');
+  try {
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
+    let io = data[0];
+    let socket = data[1];
+    let room = data[2];
+    io.to(room).emit('checkMessage', 'not Empty');
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 module.exports.creatRoom = creatRoom;

@@ -6,7 +6,10 @@ var vkAuth = require('vk-auth')(123456, 'audio');
 
 let createUser = data => {
   try {
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     passport.signUp(data.username, data.password);
   } catch (err) {
     console.error(err);
@@ -16,7 +19,10 @@ let createUser = data => {
 let authentication = async data => {
   try {
     io = data[0];
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     let user = await passport.logIn(data[1].username, data[1].password);
     if (user == 'Incorrect') {
       return io.emit('login', 'Incorrect');
@@ -32,7 +38,10 @@ let authentication = async data => {
 let authenticationVK = data => {
   try {
     var io = data[0];
-    passport.checkBody(data);
+    let inf = await passport.checkBody(data);
+    if (inf.message == 'is empty') {
+      return;
+    }
     vkAuth.authorize(data[1].username, data[1].password);
 
     vkAuth.on('error', function (err) {
