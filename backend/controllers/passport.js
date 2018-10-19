@@ -26,71 +26,73 @@ passport.deserializeUser(function (id, cb) {
   });
 });
 
-let signUp = (username, password, done) => {
-  db.User.findOne({ username: username }, function (err, user) {
+ class Passport {
 
-    if (err)
-      return done(err);
+  constructor() {
+  }
+  signUp(username, password, done) {
+    db.User.findOne({ username: username }, function (err, user) {
 
-    if (user) {
-      return 'incorrect user';
-    } else {
+      if (err)
+        return done(err);
 
-      let newUser = new db.User();
-      newUser.username = username;
-      newUser.password = createHash(password);
-      newUser.role = 'User';
-      newUser.save(function (err) {
-        if (err)
-          throw err;
+      if (user) {
+        return 'incorrect user';
+      } else {
 
-        return newUser;
-      });
+        let newUser = new db.User();
+        newUser.username = username;
+        newUser.password = createHash(password);
+        newUser.role = 'User';
+        newUser.save(function (err) {
+          if (err)
+            throw err;
+
+          return newUser;
+        });
+      }
+    });
+  }
+
+  async logInVk(login, password) {
+    vkAuth.authorize(login, password);
+
+    vkAuth.on('error', function (err) {
+      return 'Incorrect'
+    });
+
+    vkAuth.on('auth', function (tokenParams) {
+      return tokenParams;
+    })
+  }
+
+  async logIn(username, password) {
+    try {
+      let user = await db.User.findOne({ username: username });
+
+      if (!user) {
+        return 'Incorrect';
+      }
+
+      if (!isValidPassword(user, password)) {
+
+        return 'Incorrect';
+      }
+
+      return user;
+
+    } catch (err) {
+      console.error(err);
     }
-  });
-}
 
-let logInVk = async (login, password) => {
-  vkAuth.authorize(login, password);
+  }
 
-  vkAuth.on('error', function (err) {
-    return 'Incorrect'
-  });
-
-  vkAuth.on('auth', function (tokenParams) {
-    return tokenParams;
-  })
-}
-
-let logIn = async (username, password) => {
-  try {
-    let user = await db.User.findOne({ username: username });
-
-    if (!user) {
-      return 'Incorrect';
+  checkBody(data) {
+    if (!data) {
+      return { statusCode: 400, message: 'is empty' }
     }
-
-    if (!isValidPassword(user, password)) {
-
-      return 'Incorrect';
-    }
-
-    return user;
-
-  } catch (err) {
-    console.error(err);
   }
 
 }
 
-let checkBody = data => {
-  if (!data) {
-    return { statusCode: 400, message: 'is empty' }
-  }
-}
-
-module.exports = passport;
-module.exports.logInVk = logInVk;
-module.exports.signUp = signUp;
-module.exports.logIn = logIn;
-module.exports.checkBody = checkBody;
+module.exports = new Passport();
