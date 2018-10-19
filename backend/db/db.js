@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/Sockets')
+mongoose.connect(process.env.DBURl)
   .then(() => {
     console.log('Successful connection');
   })
