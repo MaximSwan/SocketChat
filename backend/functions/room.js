@@ -18,6 +18,7 @@ let creatRoom = async data => {
 
 let getRooms = async data => {
   try {
+    passport.checkBody(data);
     var io = data[0];
     let rooms = await db.Room.find({});
     io.emit('getRooms', rooms);
@@ -74,6 +75,7 @@ let addMessage = async data => {
 }
 
 let disconnectRoom = data => {
+  passport.checkBody(data);
   let socket = data[1];
   let io = data[0];
   let room = data[2];
@@ -82,6 +84,7 @@ let disconnectRoom = data => {
 }
 
 let checkMessageNow = data => {
+  passport.checkBody(data);
   let io = data[0];
   let socket = data[1];
   let room = data[2];
