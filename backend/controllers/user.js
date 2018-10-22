@@ -18,9 +18,9 @@ class User {
 
   async authentication(data) {
     try {
-      let io = data[0];
+      let io = data.io;
       await passport.checkBody(data);
-      let user = await passport.logIn(data[1].username, data[1].password);
+      let user = await passport.logIn(data.user.username, data.user.password);
       if (user == 'Incorrect') {
         return io.emit('login', 'Incorrect');
       }
@@ -34,12 +34,9 @@ class User {
 
   async authenticationVK(data) {
     try {
-      let io = data[0];
-      let inf = await passport.checkBody(data);
-      if (inf.message == 'is empty') {
-        return;
-      }
-      vkAuth.authorize(data[1].username, data[1].password);
+      let io = data.io;
+      await passport.checkBody(data);
+      vkAuth.authorize(data.user.username, data.user.password);
 
       vkAuth.on('error', function (err) {
         return io.emit('loginVk', 'Incorrect');

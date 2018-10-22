@@ -14,23 +14,21 @@ module.exports = function (server) {
 
     socket.on('register', data => { userController.createUser(data) });
 
-    socket.on('login', data => { userController.authentication([io, data])});
+    socket.on('login', data => { userController.authentication({ io: io, user: data }) });
 
-    socket.on('loginVk', data => { userController.authenticationVk([io, data]) });
+    socket.on('loginVk', data => { userController.authenticationVK({ io: io, user: data }) });
 
-    socket.on('createRoom', data => { roomController.creatRoom([io, data]) });
+    socket.on('createRoom', data => { roomController.creatRoom({ io: io, room: data }) });
 
-    socket.on('getRooms', data => { roomController.getRooms([io, data]) });
+    socket.on('getRooms', data => { roomController.getRooms({ io: io, data: data }) });
 
-    socket.on('deleteRoom', data => { roomController.deleteRoom([io, data]) });
+    socket.on('deleteRoom', data => { roomController.deleteRoom({ io: io, room: data }) });
 
-    socket.on('connectRoom', room => { roomController.connectRoom([io, socket, room]) });
+    socket.on('connectRoom', room => { roomController.connectRoom({ io: io, socket: socket, room: room }) });
 
-    socket.on('disconnectRoom', room => { roomController.disconnectRoom([io, socket, room]) });
+    socket.on('disconnectRoom', room => { roomController.disconnectRoom({ io: io, socket: socket, room: room }) });
 
-    socket.on('message', data => { roomController.addMessage([io, socket, data]) });
-
-    socket.on('checkMessage', data => { roomController.checkMessageNow([io, socket, data]) })
+    socket.on('message', data => { roomController.addMessage({ io: io, socket: socket, room: data }) });
 
     socket.on('disconnect', () => { console.log('user disconnected'); });
 

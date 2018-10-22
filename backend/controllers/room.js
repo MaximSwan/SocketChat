@@ -8,9 +8,9 @@ class Room {
   async creatRoom(data) {
     try {
       await passport.checkBody(data);
-      var io = data[0];
+      var io = data.io
       let room = new db.Room();
-      room.name = data[1];
+      room.name = data.room;
       room.validate();
       await room.save();
       io.emit('createRoom', room);
@@ -22,7 +22,7 @@ class Room {
   async getRooms(data) {
     try {
       await passport.checkBody(data);
-      var io = data[0];
+      var io = data.io;
       let rooms = await db.Room.find({});
       io.emit('getRooms', rooms);
     } catch (err) {
@@ -33,8 +33,8 @@ class Room {
   async deleteRoom(data) {
     try {
       await passport.checkBody(data);
-      var io = data[0];
-      let roomDeleted = await db.Room.findOneAndRemove({ name: data[1] });
+      var io = data.io;
+      let roomDeleted = await db.Room.findOneAndRemove({ name: data.room });
       io.emit('deleteRoom', roomDeleted);
     } catch (err) {
       console.error(err);
@@ -44,9 +44,9 @@ class Room {
   async connectRoom(data) {
     try {
       await passport.checkBody(data);
-      var io = data[0];
-      var socket = data[1];
-      var room = data[2];
+      var io = data.io;
+      var socket = data.socket;
+      var room = data.room;
       socket.join(room);
       io.to(room).emit('message', 'I connected to the room');
       socket.on('message', async data => {
@@ -59,9 +59,9 @@ class Room {
   async addMessage(data) {
     try {
       await passport.checkBody(data);
-      let state = data[2];
-      let io = data[0];
-      let socket = data[1];
+      let state = data.room;
+      let io = data.io;
+      let socket = data.socket;
       let room = state[2];
       let token = await messageFunc.sendMessage(state);
       if (token.response) {
@@ -80,9 +80,9 @@ class Room {
   async disconnectRoom(data) {
     try {
       await passport.checkBody(data);
-      let socket = data[1];
-      let io = data[0];
-      let room = data[2];
+      let socket = data.socket;
+      let io = data.io;
+      let room = data.room;
       socket.leave(room);
       io.to(room).emit('message', 'I leave');
     } catch (err) {
