@@ -26,7 +26,7 @@ passport.deserializeUser(function (id, cb) {
   });
 });
 
- class Passport {
+class Passport {
 
   constructor() {
   }
@@ -90,6 +90,8 @@ passport.deserializeUser(function (id, cb) {
   checkBody(data) {
     if (!data) {
       return { statusCode: 400, message: 'is empty' }
+    } else {
+      return { statusCode: 200, message: 'all is well' }
     }
   }
 

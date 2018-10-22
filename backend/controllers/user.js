@@ -9,7 +9,10 @@ class User {
   constructor() { }
   async createUser(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       return passport.signUp(data.username, data.password);
     } catch (err) {
       console.error(err);
@@ -19,7 +22,10 @@ class User {
   async authentication(data) {
     try {
       let io = data.io;
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       let user = await passport.logIn(data.user.username, data.user.password);
       if (user == 'Incorrect') {
         return io.emit('login', 'Incorrect');
@@ -35,7 +41,10 @@ class User {
   async authenticationVK(data) {
     try {
       let io = data.io;
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       vkAuth.authorize(data.user.username, data.user.password);
 
       vkAuth.on('error', function (err) {

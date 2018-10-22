@@ -7,8 +7,11 @@ class Room {
   }
   async creatRoom(data) {
     try {
-      await passport.checkBody(data);
-      var io = data.io
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
+      var io = data.io;
       let room = new db.Room();
       room.name = data.room;
       room.validate();
@@ -21,7 +24,10 @@ class Room {
 
   async getRooms(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       var io = data.io;
       let rooms = await db.Room.find({});
       io.emit('getRooms', rooms);
@@ -32,7 +38,10 @@ class Room {
 
   async deleteRoom(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       var io = data.io;
       let roomDeleted = await db.Room.findOneAndRemove({ name: data.room });
       io.emit('deleteRoom', roomDeleted);
@@ -43,7 +52,10 @@ class Room {
 
   async connectRoom(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       var io = data.io;
       var socket = data.socket;
       var room = data.room;
@@ -58,7 +70,10 @@ class Room {
 
   async addMessage(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       let state = data.room;
       let io = data.io;
       let socket = data.socket;
@@ -79,7 +94,10 @@ class Room {
 
   async disconnectRoom(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       let socket = data.socket;
       let io = data.io;
       let room = data.room;
@@ -92,7 +110,10 @@ class Room {
 
   async checkMessageNow(data) {
     try {
-      await passport.checkBody(data);
+      let dataCheck = await passport.checkBody(data);
+      if (dataCheck.message == 'is empty') {
+        return;
+      }
       let io = data[0];
       let socket = data[1];
       let room = data[2];
