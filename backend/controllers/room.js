@@ -18,7 +18,7 @@ class Room {
       await room.save();
       io.emit('createRoom', room);
     } catch (err) {
-      console.log(err);
+      passport.checkErr(err);
     }
   }
 
@@ -32,7 +32,7 @@ class Room {
       let rooms = await db.Room.find({});
       io.emit('getRooms', rooms);
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 
@@ -46,7 +46,7 @@ class Room {
       let roomDeleted = await db.Room.findOneAndRemove({ name: data.room });
       io.emit('deleteRoom', roomDeleted);
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 
@@ -64,7 +64,7 @@ class Room {
       socket.on('message', async data => {
       })
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 
@@ -88,7 +88,7 @@ class Room {
       }
       passport.logInVk();
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 
@@ -104,24 +104,11 @@ class Room {
       socket.leave(room);
       io.to(room).emit('message', 'I leave');
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 
-  async checkMessageNow(data) {
-    try {
-      let dataCheck = await passport.checkBody(data);
-      if (dataCheck.message == 'is empty') {
-        return;
-      }
-      let io = data[0];
-      let socket = data[1];
-      let room = data[2];
-      io.to(room).emit('checkMessage', 'not Empty');
-    } catch (err) {
-      console.error(err);
-    }
-  }
+
 }
 
 module.exports = new Room();

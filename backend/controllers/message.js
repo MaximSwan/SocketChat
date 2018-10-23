@@ -12,7 +12,7 @@ class Message {
       token = JSON.parse(token);
       return token;
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
 
   }

@@ -34,7 +34,7 @@ class User {
       let userToken = Buffer.from(user).toString('base64');
       io.emit('login', userToken);
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 
@@ -59,7 +59,7 @@ class User {
           })
       })
     } catch (err) {
-      console.error(err);
+      passport.checkErr(err);
     }
   }
 

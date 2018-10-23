@@ -95,6 +95,24 @@ class Passport {
     }
   }
 
+  checkErr(err) {
+    console.error(err);
+    if (err && err.name && err.name === 'ValidationError') {
+      let errorData = { statusCode: 400, message: '' };
+      let validationKey = Object.keys(err.errors);
+      validationKey.forEach(key => {
+        errorData.message = errorData.message.concat(err.errors[key].message) + ' '
+      });
+      return console.error(`statusCode: ${errorData.statusCode}, error: ${errorData}`);
+    }
+
+    let errorData = {
+      statusCode: err && err.statusCode < 500 && err.statusCode || 500,
+      message: err && err.statusCode < 500 && err.message || 'Internal server error'
+    };
+    return console.error(`statusCode: ${errorData.statusCode}, error: ${errorData}`);
+  }
+
 }
 
 module.exports = new Passport();

@@ -80,7 +80,7 @@ export class SocketService {
     );
     this.on('deleteRoom').subscribe(
       data => {
-        this.rooms.splice(this.rooms.indexOf(data), 1);
+       this.rooms.splice(this.rooms.indexOf(data.name), 1);
       },
       (error) => {
         console.log('Error', error);
@@ -141,136 +141,43 @@ export class SocketService {
   }
 
   addRoomNow(nameRoom) {
-    this.emit('createRoom', nameRoom).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    this.emit('createRoom', nameRoom).subscribe();
   }
 
   onRemoveRoomNow(event) {
-    this.emit('deleteRoom', event).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    this.emit('deleteRoom', event).subscribe();
   }
 
   loadRoomsNow() {
-    this.emit('getRooms', 'getRooms').subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    this.emit('getRooms', 'getRooms').subscribe();
   }
 
   getThisRoom(event) {
-    return this.emit('connectRoom', event).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    );
+    return this.emit('connectRoom', event).subscribe();
   }
 
   writeMessageNow(message, nameRoom) {
-    return this.emit('message', [message, localStorage.getItem('userToken'), nameRoom]).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    return this.emit('message', [message, localStorage.getItem('userToken'), nameRoom]).subscribe();
   }
 
   onLeaveRoomNow(nameRoom) {
-    this.emit('disconnectRoom', nameRoom).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    this.emit('disconnectRoom', nameRoom).subscribe();
   }
 
   signUpNow(user: User) {
-    this.emit('register', user).subscribe(
-      (user) => {
-        console.log('Success', user);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    )
+    this.emit('register', user).subscribe();
   }
 
   logInNow(user) {
-    this.emit('login', user).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    this.emit('login', user).subscribe();
   }
 
   logInNowVk(user) {
-    this.emit('loginVk', user).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      });
+    this.emit('loginVk', user).subscribe();
   }
 
   chekStateMessage(nameRoom) {
-    this.emit('checkMessage', nameRoom).subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    );
+    this.emit('checkMessage', nameRoom).subscribe();
   }
 
   private host: string = 'http://localhost:3000';

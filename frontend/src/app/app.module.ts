@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { SocketService } from './services/socket/socket.service';
 import { LoginComponent } from './components/login/login/login.component';
 import { RegisterComponent } from './components/register/register/register.component';
-
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { RoomsComponent } from './components/rooms/rooms/rooms.component';
@@ -40,6 +39,7 @@ const appRoute: Routes = [
     BrowserModule,
     RouterModule.forRoot(appRoute),
     FormsModule,
+    SocketIoModule
   ],
   providers: [UserService, SocketService],
   bootstrap: [AppComponent]
