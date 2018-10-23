@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { RoomsComponent } from './components/rooms/rooms/rooms.component';
 import { RoomComponent } from './components/room/room/room.component';
+import { MainPageComponent } from './components/main-page/main-page.component';
 const appRoute: Routes = [
   {
     path: 'rooms',
@@ -32,7 +33,8 @@ const appRoute: Routes = [
     LoginComponent,
     RegisterComponent,
     RoomsComponent,
-    RoomComponent
+    RoomComponent,
+    MainPageComponent
   ],
   imports: [
     HttpClientModule,

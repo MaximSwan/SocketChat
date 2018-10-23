@@ -27,7 +27,7 @@ export class RoomComponent implements OnInit {
   message;
   user;
   toogleChat: boolean = false;
-
+  
   deleteThisRoom(room) {
     this.removeRoom.emit(room);
   }

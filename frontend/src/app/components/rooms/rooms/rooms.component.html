@@ -1,7 +1,17 @@
 <div *ngIf="user">
 
-  <p style="color: blue">Вы вошли как : {{user}} </p>
-  <p (click)="logOut()" routerLink="/login" style="color: red">Выйти</p>
+  <div class="row justify-content-end">
+    <div class="card text-white bg-dark mb-3" style="max-width: 18rem; position: relative; top: 60px">
+      <div class="card-header">Вы вошли как:
+        <p class="user"> {{user}} </p>
+        <button class="btn btn-danger" routerLink="/login" (click)="logOut()">Log out</button>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">
+        </h5>
+      </div>
+    </div>
+  </div>
   <button class="btn-primary" (click)="toggleAdd = !toggleAdd;">add room</button>
   <div *ngIf="toggleAdd == true">
     <input [(ngModel)]="nameRoom" type="text" placeholder="имя комнаты">

@@ -8,7 +8,6 @@ import { SocketService } from './services/socket/socket.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  toggle:boolean = true;
   constructor(
     private userService: UserService,
     private socket: SocketService
